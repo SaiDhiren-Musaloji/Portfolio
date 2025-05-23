@@ -361,9 +361,34 @@
             color: var(--apple-gray);
             font-size: 14px;
         }
+
+        /* View Counter */
+        .view-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--apple-blue);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .view-counter:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
+    <!-- Add view counter element -->
+    <div class="view-counter" id="viewCounter">
+        Views: Loading...
+    </div>
+
     <div class="container">
         <!-- Hero Section -->
         <section class="hero">
@@ -723,18 +748,90 @@
         });
 
         // Form submission handling
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
+            
+            const submitButton = this.querySelector('.submit-button');
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
 
-            if (name && email && message) {
-                alert('Thank you for your message! I\'ll get back to you soon.');
-                this.reset();
-            } else {
-                alert('Please fill in all required fields.');
+            // Disable submit button and show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+
+            try {
+                // Trigger GitHub Action using repository dispatch
+                const response = await fetch('https://api.github.com/repos/SaiDhiren-Musaloji/portfolio/dispatches', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'token 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'
+                    },
+                    body: JSON.stringify({
+                        event_type: 'contact_form',
+                        client_payload: formData
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Thank you for your message! I\'ll get back to you soon.');
+                    this.reset();
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Sorry, there was an error sending your message. Please try again later.');
+            } finally {
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Message';
             }
+        });
+
+        // View counter functionality
+        async function updateViewCount() {
+            try {
+                // Trigger GitHub Action to update view count
+                await fetch('https://api.github.com/repos/SaiDhiren-Musaloji/portfolio/dispatches', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'token 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'
+                    },
+                    body: JSON.stringify({
+                        event_type: 'page_view'
+                    })
+                });
+
+                // Get current view count
+                const response = await fetch('https://api.github.com/repos/SaiDhiren-Musaloji/portfolio/issues?labels=view-counter&state=open', {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Authorization': 'token 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'
+                    }
+                });
+
+                const issues = await response.json();
+                if (issues.length > 0) {
+                    const viewCount = issues[0].body.match(/Current view count: (\d+)/)[1];
+                    document.getElementById('viewCounter').textContent = `Views: ${viewCount}`;
+                }
+            } catch (error) {
+                console.error('Error updating view count:', error);
+                document.getElementById('viewCounter').textContent = 'Views: Error';
+            }
+        }
+
+        // Update view count when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateViewCount();
         });
     </script>
 </body>
