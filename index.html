@@ -85,11 +85,28 @@
             color: var(--apple-dark);
             font-size: 2rem;
             font-weight: 600;
-            transition: transform var(--transition-speed) ease;
+            transition: color var(--transition-speed) ease;
+            position: relative;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--apple-blue);
+            transition: width 0.3s ease;
         }
 
         .section-header:hover {
-            transform: scale(var(--zoom-scale));
+            color: var(--apple-blue);
+        }
+
+        .section-header:hover::after {
+            width: 100px;
         }
 
         .subsection-header {
@@ -98,6 +115,28 @@
             color: var(--apple-dark);
             font-size: 1.5rem;
             font-weight: 600;
+            transition: color var(--transition-speed) ease;
+            position: relative;
+        }
+
+        .subsection-header::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--apple-blue);
+            transition: width 0.3s ease;
+        }
+
+        .subsection-header:hover {
+            color: var(--apple-blue);
+        }
+
+        .subsection-header:hover::after {
+            width: 80px;
         }
 
         /* Cards */
