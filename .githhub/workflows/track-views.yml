@@ -1,47 +1,31 @@
-name: Track Page Views
+name: Track Page Visits
 
 on:
-  repository_dispatch:
-    types: [page_view]
+  issues:
+    types: [opened]
 
 jobs:
-  update-view-count:
+  process-visit:
+    if: contains(github.event.issue.labels.*.name, 'page-visit')
     runs-on: ubuntu-latest
     steps:
-      - name: Update View Count
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            // Get the current view count issue
-            const issues = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ['view-counter'],
-              state: 'open'
-            });
-
-            let viewCountIssue;
-            if (issues.data.length === 0) {
-              // Create new issue if none exists
-              viewCountIssue = await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: 'Portfolio View Counter',
-                body: 'Current view count: 1',
-                labels: ['view-counter']
-              });
-            } else {
-              viewCountIssue = issues.data[0];
-              // Extract current count and increment
-              const currentCount = parseInt(viewCountIssue.body.match(/Current view count: (\d+)/)[1]);
-              const newCount = currentCount + 1;
-              
-              // Update the issue
-              await github.rest.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: viewCountIssue.number,
-                body: `Current view count: ${newCount}`
-              });
-            } 
+      - name: Process Visit Data
+        run: |
+          echo "Processing visit data from issue #${{ github.event.issue.number }}"
+          echo "Visit details:"
+          echo "${{ github.event.issue.body }}"
+          
+      - name: Update Visit Summary
+        run: |
+          # Create or update a summary file
+          echo "Total Visits: ${{ github.event.issue.number }}" >> visit-summary.txt
+          echo "Last Visit: ${{ github.event.issue.created_at }}" >> visit-summary.txt
+          echo "----------------------------------------" >> visit-summary.txt
+          
+      - name: Commit Summary
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add visit-summary.txt
+          git commit -m "Update visit summary"
+          git push 
