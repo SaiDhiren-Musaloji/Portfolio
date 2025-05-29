@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sai Dhiren Musaloji</title>
+    <!-- Add Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Base Styles */
         :root {
@@ -478,6 +480,49 @@
             height: 20px;
             fill: currentColor;
         }
+
+        /* Contact Details Section */
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 32px 0;
+            flex-wrap: wrap;
+        }
+
+        .contact-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--apple-dark);
+            transition: transform var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        .contact-icon:hover {
+            transform: scale(var(--zoom-scale));
+            color: var(--apple-blue);
+        }
+
+        .contact-icon i {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .contact-icon span {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .contact-details {
+                gap: 16px;
+            }
+            
+            .contact-icon:hover {
+                transform: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -693,6 +738,27 @@
 
         <!-- Contact Section -->
         <h2 class="section-header">Get In Touch</h2>
+        
+        <!-- Contact Details with Icons -->
+        <div class="contact-details">
+            <a href="tel:+18624238830" class="contact-icon">
+                <i class="fas fa-phone"></i>
+                <span>+1 (862) 423-8830</span>
+            </a>
+            <a href="mailto:musalojidhiren@gmail.com" class="contact-icon">
+                <i class="fas fa-envelope"></i>
+                <span>musalojidhiren@gmail.com</span>
+            </a>
+            <a href="https://www.linkedin.com/in/musalojidhiren/" target="_blank" class="contact-icon">
+                <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/SaiDhiren-Musaloji" target="_blank" class="contact-icon">
+                <i class="fab fa-github"></i>
+                <span>GitHub</span>
+            </a>
+        </div>
+
         <div class="contact-form">
             <form id="contactForm" action="https://formspree.io/f/manogbgg" method="POST">
                 <div class="form-group">
