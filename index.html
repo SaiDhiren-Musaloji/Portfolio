@@ -111,6 +111,10 @@
             width: 100px;
         }
 
+        .section-header:hover::after {
+            width: 100px;
+        }
+
         .subsection-header {
             text-align: center;
             margin: 32px 0 16px 0;
@@ -203,11 +207,29 @@
             margin: 24px 0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 113, 227, 0.1));
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease;
         }
 
         .experience-card:hover {
             transform: scale(var(--zoom-scale));
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .experience-card:hover::before {
+            opacity: 1;
         }
 
         .experience-header {
@@ -217,41 +239,125 @@
             margin-bottom: 16px;
         }
 
+        .experience-header h3 {
+            color: var(--apple-blue);
+        }
+
         /* Projects Section */
-        .project-card {
+        .project-scroll-container {
             display: flex;
-            gap: 24px;
-            align-items: flex-start;
-            margin: 24px 0;
-            background-color: white;
-            padding: 24px;
-            border-radius: 18px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            overflow-x: auto;
+            gap: 32px;
+            padding: 24px 0;
+            position: relative; /* For positioning the scroll buttons */
+            margin-bottom: 16px; /* Space for scrollbar */
         }
 
-        .project-card:hover {
-            transform: scale(var(--zoom-scale));
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .project-image {
-            flex: 1;
-            max-width: 300px;
-            min-height: 200px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .project-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* Custom Scrollbar */
+        .project-scroll-container::-webkit-scrollbar {
+            height: 2px;
             display: block;
         }
 
-        .project-content {
-            flex: 2;
+        .project-scroll-container::-webkit-scrollbar-track {
+            background: rgba(245, 245, 247, 0.3);
+            border-radius: 4px;
+        }
+
+        .project-scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 113, 227, 0.3);
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .project-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 113, 227, 0.6);
+        }
+
+        /* Firefox scrollbar */
+        .project-scroll-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 113, 227, 0.3) rgba(245, 245, 247, 0.3);
+        }
+
+        /* Scroll Buttons */
+        .scroll-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .scroll-button:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .scroll-button.left {
+            left: 0;
+        }
+
+        .scroll-button.right {
+            right: 0;
+        }
+
+        .scroll-button i {
+            color: var(--apple-blue);
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .scroll-button {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        .project-card {
+            min-width: 340px;
+            max-width: 380px;
+            flex: 0 0 auto;
+            background: #f5fafd;
+            border-radius: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            padding: 32px 24px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box; /* Include padding/border in height */
+        }
+        .project-card .project-content {
+            opacity: 1;
+            transition: none;
+            padding: 0;
+            pointer-events: auto;
+            overflow-y: auto;
+            margin-top: 16px;
+        }
+        .project-card .project-title {
+            margin: 16px 0 0 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--apple-blue);
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .project-card {
+                min-width: 80vw;
+                max-width: 90vw;
+                padding: 20px 10px;
+            }
         }
 
         /* Profile Image */
@@ -523,6 +629,38 @@
                 transform: none;
             }
         }
+
+        .experience-header h3 {
+            color: var(--apple-blue);
+        }
+
+        .project-image {
+            width: 100%;
+            max-width: 300px;
+            height: 200px; /* Increased height */
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 auto;
+            flex-shrink: 0; /* Prevents shrinking */
+            flex-grow: 0;   /* Prevents growing beyond content or explicit size */
+            position: relative;
+            box-sizing: border-box; /* Include padding/border in height */
+            background-color: #f5f5f7; /* Light background for image container */
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Changed from cover to contain to prevent cropping */
+            display: block;
+            position: absolute; /* Added for absolute positioning */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto; /* Centers the image if it doesn't perfectly fill the space */
+            padding: 10px; /* Add some padding around the image */
+        }
     </style>
 </head>
 <body>
@@ -640,83 +778,117 @@
 
         <!-- Projects Section -->
         <h1 class="section-header">Featured Projects</h1>
-        
-        <!-- Project 1 -->
-        <div class="project-card">
-            <div class="project-image">
-                <img src="images/projects/deep_learning.png" alt="Deep Learning Project">
+        <div style="position: relative;">
+            <button class="scroll-button left" id="scrollLeft">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="project-scroll-container" id="projectScrollContainer">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/projects/deep_learning.png" alt="Deep Learning Project">
+                    </div>
+                    <div class="project-title">Advanced Neural Network Architectures</div>
+                    <div class="project-content">
+                        <p>
+                            Architected and refined diverse neural network architectures (DNN/GNN) for classification and
+                            time-series forecasting, skillfully enhancing model accuracy through rigorous hyperparameter tuning and
+                            cross-validation.<br><br>
+                            Engineered cutting-edge AI systems using GANs and diffusion models for image synthesis, leveraging
+                            distributed TensorFlow implementations to boost computational efficiency.
+                        </p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/projects/traffic_forecasting.png" alt="Traffic Forecasting Project">
+                    </div>
+                    <div class="project-title">Ensemble Traffic Forecasting System</div>
+                    <div class="project-content">
+                        <p>
+                            Developed a sophisticated ensemble learning framework combining ARIMA, LSTM, and Graph Neural Networks for urban traffic prediction using the PEMS-BAY dataset.<br><br>
+                            Applied graph construction techniques and dimensionality reduction methods to handle 325 traffic sensors, focusing analysis on 20 strategically selected locations across the San Francisco Bay Area.
+                        </p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/projects/indus.png" alt="Project Indus">
+                    </div>
+                    <div class="project-title">Project Indus - Indigenous LLM Development</div>
+                    <div class="project-content">
+                        <p>
+                            Contributed to the development of an indigenous Large Language Model capable of processing and generating text in over 15 Indian languages.<br>
+                            Implemented custom data preprocessing pipelines for linguistic normalization and feature extraction.<br>
+                            Applied advanced transformer architectures for natural language understanding and generation.
+                        </p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/projects/portfolio.png" alt="Portfolio Project">
+                    </div>
+                    <div class="project-title">Equity Portfolio Management Project</div>
+                    <div class="project-content">
+                        <p>
+                            Formulated data-driven equity strategies using Python's Pandas, NumPy, and Matplotlib to optimize a $5M
+                            portfolio across stocks (IBM, MSFT, GOOG, AAPL, AMZN), deploying quantitative analysis and risk
+                            modeling to maximize returns through algorithmic position sizing and performance benchmarking.
+                        </p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/projects/flight_data.png" alt="Flight Data Project">
+                    </div>
+                    <div class="project-title">Flight Data Analysis with Scalability Testing</div>
+                    <div class="project-content">
+                        <p>
+                            Developed distributed computing solutions by architecting AWS-based MapReduce pipelines with Oozie
+                            orchestration, stress-testing system scalability through multiyear dataset expansions (1987-2008) while
+                            quantifying performance metrics as data volume increases.
+                        </p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/projects/bank_app.png" alt="Database Management Web Application">
+                    </div>
+                    <div class="project-title">Database Management Web Application</div>
+                    <div class="project-content">
+                        <p>
+                            Engineered a lightweight, scalable web system using Flask and MySQL for core banking functions, featuring secure routing and real-time user-to-user transactions. Implemented clean separation of concerns between routing, logic, and data layers for enhanced maintainability.<br><br>
+                            Developed an administrative interface providing aggregated insights including total transaction counts, cumulative funds transferred, and user-level activity summary. Designed with enterprise-level scalability in mind, featuring modular components ready for containerization and CI/CD deployment.
+                        </p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/projects/aws_pipeline.png" alt="AWS SQS Image and Text Recognition Pipeline">
+                    </div>
+                    <div class="project-title">AWS SQS Image and Text Recognition Pipeline</div>
+                    <div class="project-content">
+                        <p>
+                            Implemented a distributed, event-driven processing pipeline leveraging core AWS services including EC2, SQS, S3, and Rekognition. Engineered separate EC2 instances for image object detection and text extraction, coordinated through SQS message queues for efficient workload distribution.<br><br>
+                            Designed an asynchronous communication system between services to achieve scalability and fault tolerance. Successfully solved the challenge of coordinating stateful, resource-intensive tasks in the cloud without tight coupling, demonstrating practical implementation of cloud-native services for image processing workflows.
+                        </p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/projects/wine_ml.png" alt="Wine Quality Prediction">
+                    </div>
+                    <div class="project-title">Wine Quality Prediction – Parallel Machine Learning on AWS</div>
+                    <div class="project-content">
+                        <p>
+                            Architected a scalable ML inference solution using distributed compute resources on AWS. Deployed Spark across a multi-node EMR cluster to train the prediction pipeline in parallel, optimizing resource utilization and minimizing training time.<br><br>
+                            Containerized the resulting model using Docker for deployment on a standalone EC2 instance, ensuring environment consistency and ease of reuse. Demonstrated practical engineering approaches for running compute-intensive workloads with high availability and operational efficiency in a cloud environment.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="project-content">
-                <h3>Advanced Neural Network Architectures</h3>
-                <p>
-                    Architected and refined diverse neural network architectures (DNN/GNN) for classification and
-                    time-series forecasting, skillfully enhancing model accuracy through rigorous hyperparameter tuning and
-                    cross-validation.
-                    <br><br>
-                    Engineered cutting-edge AI systems using GANs and diffusion models for image synthesis, leveraging
-                    distributed TensorFlow implementations to boost computational efficiency.
-                </p>
-            </div>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="project-card">
-            <div class="project-image">
-                <img src="images/projects/traffic_forecasting.png" alt="Traffic Forecasting Project">
-            </div>
-            <div class="project-content">
-                <h3>Ensemble Traffic Forecasting System</h3>
-                <p>
-                    Developed a sophisticated ensemble learning framework combining ARIMA, LSTM, and Graph Neural Networks for urban traffic prediction using the PEMS-BAY dataset.
-                    <br><br>
-                    Applied graph construction techniques and dimensionality reduction methods to handle 325 traffic sensors, focusing analysis on 20 strategically selected locations across the San Francisco Bay Area.
-                </p>
-            </div>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="project-card">
-            <div class="project-image">
-                <img src="images/projects/indus.png" alt="Project Indus">
-            </div>
-            <div class="project-content">
-                <h3>Project Indus - Indigenous LLM Development</h3>
-                <p>
-                    Contributed to the development of an indigenous Large Language Model capable of processing and generating text in over 15 Indian languages.
-                    Implemented custom data preprocessing pipelines for linguistic normalization and feature extraction.
-                    Applied advanced transformer architectures for natural language understanding and generation.
-                </p>
-            </div>
-        </div>
-
-        <!-- Project 4 -->
-        <div class="project-card">
-            <div class="project-image">
-                <img src="images/projects/portfolio.png" alt="Portfolio Project">
-            </div>
-            <div class="project-content">
-                <h3>Equity Portfolio Management Project</h3>
-                <p>
-                    Formulated data-driven equity strategies using Python's Pandas, NumPy, and Matplotlib to optimize a $5M
-                    portfolio across stocks (IBM, MSFT, GOOG, AAPL, AMZN), deploying quantitative analysis and risk
-                    modeling to maximize returns through algorithmic position sizing and performance benchmarking.
-                </p>
-            </div>
-        </div>
-
-        <!-- Project 5 -->
-        <div class="project-card">
-            <div class="project-image">
-                <img src="images/projects/flight_data.png" alt="Flight Data Project">
-            </div>
-            <div class="project-content">
-                <h3>Flight Data Analysis with Scalability Testing</h3>
-                <p>
-                    Developed distributed computing solutions by architecting AWS-based MapReduce pipelines with Oozie
-                    orchestration, stress-testing system scalability through multiyear dataset expansions (1987-2008) while
-                    quantifying performance metrics as data volume increases.
-                </p>
-            </div>
+            <button class="scroll-button right" id="scrollRight">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
 
         <!-- Certifications Section -->
@@ -821,6 +993,21 @@
                     src: 'images/projects/flight_data.png',
                     fallback: 'https://via.placeholder.com/300x200.png?text=Flight+Data+Project',
                     alt: 'Flight Data Project'
+                },
+                bank_app: {
+                    src: 'images/projects/database.png',
+                    fallback: 'https://via.placeholder.com/300x200.png?text=Database+Management+System',
+                    alt: 'Database Management Web Application'
+                },
+                aws_pipeline: {
+                    src: 'images/projects/sqs.png',
+                    fallback: 'https://via.placeholder.com/300x200.png?text=AWS+SQS+Pipeline',
+                    alt: 'AWS SQS Image and Text Recognition Pipeline'
+                },
+                wine_ml: {
+                    src: 'images/projects/Parallel.png',
+                    fallback: 'https://via.placeholder.com/300x200.png?text=Wine+Quality+Prediction',
+                    alt: 'Wine Quality Prediction'
                 }
             },
             certificates: {
@@ -837,23 +1024,24 @@
             }
         };
 
-        function createImageContainer(config) {
-            const container = document.createElement('div');
-            container.className = 'image-container';
-            
+        // Refactored function to directly load and append image to a given element
+        function loadAndAppendImage(targetElement, config) {
+            // Clear any existing content in the targetElement (like the loading message)
+            targetElement.innerHTML = '';
+
             const img = document.createElement('img');
             img.alt = config.alt;
             
-            // Add loading state
-            container.innerHTML = '<div class="loading">Loading...</div>';
+            // Add loading state directly to the targetElement
+            targetElement.innerHTML = '<div class="loading">Loading...</div>';
             
             // Try loading the main image
             img.src = config.src;
             
             img.onload = function() {
                 console.log(`Image loaded successfully: ${config.alt}`);
-                container.innerHTML = '';
-                container.appendChild(img);
+                targetElement.innerHTML = ''; // Clear loading message
+                targetElement.appendChild(img); // Append the image directly
             };
             
             img.onerror = function() {
@@ -862,7 +1050,7 @@
                 img.src = config.fallback;
                 img.onerror = function() {
                     console.log(`Fallback image also failed: ${config.alt}`);
-                    container.innerHTML = `
+                    targetElement.innerHTML = `
                         <div class="image-error">
                             <div>
                                 <p>Image not available</p>
@@ -872,8 +1060,6 @@
                     `;
                 };
             };
-            
-            return container;
         }
 
         // Initialize images when DOM is loaded
@@ -884,29 +1070,44 @@
             const profileContainer = document.querySelector('.profile-image');
             if (profileContainer) {
                 console.log('Loading profile image...');
-                profileContainer.innerHTML = '';
-                profileContainer.appendChild(createImageContainer(imageConfig.profile));
+                loadAndAppendImage(profileContainer, imageConfig.profile);
             }
 
-            // Project images
-            document.querySelectorAll('.project-image').forEach((container, index) => {
-                const projectKey = Object.keys(imageConfig.projects)[index];
-                if (projectKey) {
-                    console.log(`Loading project image: ${projectKey}`);
-                    container.innerHTML = '';
-                    container.appendChild(createImageContainer(imageConfig.projects[projectKey]));
+            // Project images - Updated to use project titles for matching
+            const projectTitles = {
+                'Advanced Neural Network Architectures': 'deep_learning',
+                'Ensemble Traffic Forecasting System': 'traffic_forecasting',
+                'Project Indus - Indigenous LLM Development': 'indus',
+                'Equity Portfolio Management Project': 'portfolio',
+                'Flight Data Analysis with Scalability Testing': 'flight_data',
+                'Database Management Web Application': 'bank_app',
+                'AWS SQS Image and Text Recognition Pipeline': 'aws_pipeline',
+                'Wine Quality Prediction – Parallel Machine Learning on AWS': 'wine_ml'
+            };
+
+            document.querySelectorAll('.project-card').forEach((card) => {
+                const titleElement = card.querySelector('.project-title');
+                if (titleElement) {
+                    const title = titleElement.textContent.trim();
+                    const projectKey = projectTitles[title];
+                    if (projectKey && imageConfig.projects[projectKey]) {
+                        const imageContainer = card.querySelector('.project-image');
+                        if (imageContainer) {
+                            console.log(`Loading project image for: ${title}`);
+                            loadAndAppendImage(imageContainer, imageConfig.projects[projectKey]);
+                        }
+                    }
                 }
             });
 
             // Certificate images
             document.querySelectorAll('.card').forEach((card, index) => {
-                const certKey = Object.keys(imageConfig.certificates)[index];
-                if (certKey) {
-                    console.log(`Loading certificate image: ${certKey}`);
-                    const imgContainer = card.querySelector('img')?.parentElement;
-                    if (imgContainer) {
-                        imgContainer.innerHTML = '';
-                        imgContainer.appendChild(createImageContainer(imageConfig.certificates[certKey]));
+                const existingImg = card.querySelector('img');
+                if (existingImg) {
+                    const certKey = Object.keys(imageConfig.certificates)[index];
+                    if (certKey) {
+                        console.log(`Loading certificate image: ${certKey}`);
+                        loadAndAppendImage(existingImg.parentElement, imageConfig.certificates[certKey]);
                     }
                 }
             });
@@ -1072,6 +1273,59 @@ Engaged: ${this.visitorInfo.engaged ? 'Yes' : 'No'}
         // Initialize the tracker when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             new PageViewTracker();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollContainer = document.getElementById('projectScrollContainer');
+            const scrollLeftBtn = document.getElementById('scrollLeft');
+            const scrollRightBtn = document.getElementById('scrollRight');
+
+            // Scroll amount (adjust as needed)
+            const scrollAmount = 400;
+            let isScrolling = false;
+
+            // Function to handle smooth scrolling
+            function smoothScroll(direction) {
+                if (isScrolling) return;
+                isScrolling = true;
+
+                const currentScroll = scrollContainer.scrollLeft;
+                const targetScroll = direction === 'left' ? 
+                    currentScroll - scrollAmount : 
+                    currentScroll + scrollAmount;
+
+                scrollContainer.scrollTo({
+                    left: targetScroll,
+                    behavior: 'smooth'
+                });
+
+                // Reset scrolling state after animation
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 500);
+            }
+
+            // Button click handlers
+            scrollLeftBtn.addEventListener('click', () => {
+                smoothScroll('left');
+            });
+
+            scrollRightBtn.addEventListener('click', () => {
+                smoothScroll('right');
+            });
+
+            // Show/hide buttons based on scroll position
+            function updateScrollButtons() {
+                scrollLeftBtn.style.display = scrollContainer.scrollLeft > 0 ? 'flex' : 'none';
+                scrollRightBtn.style.display = 
+                    scrollContainer.scrollLeft < (scrollContainer.scrollWidth - scrollContainer.clientWidth) 
+                    ? 'flex' : 'none';
+            }
+
+            // Update button visibility on scroll
+            scrollContainer.addEventListener('scroll', updateScrollButtons);
+            window.addEventListener('resize', updateScrollButtons);
+            updateScrollButtons(); // Initial check
         });
     </script>
 </body>
